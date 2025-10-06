@@ -4,12 +4,12 @@
 **Type:** Contract
 
 ## About the Role
-We are looking for a versatile Python developer to design, build, and operate an end-to-end pipeline for ingesting, analyzing, and visualizing security logs across AWS, Azure, and GCP. You will help our security and operations teams surface actionable insights from DNS logs, proxy logs, NSG flow logs, Orca, Uptycs, and additional telemetry sources.
+We are looking for a versatile Python developer to design, build, and operate an end-to-end pipeline for ingesting, analyzing, and visualizing security logs across AWS, Azure, and GCP. You will help our security and operations teams surface actionable insights from DNS logs, proxy logs, NSG flow logs, VPC flow logs, Orca, Uptycs, and additional telemetry sources.
 
 ## Key Responsibilities
 ### Multi-Cloud Log Ingestion & Analysis
-- Write Python services to fetch and normalize logs via AWS/Azure/GCP APIs (S3, Storage Queues, Pub/Sub, etc.).
-- Parse, cleanse, and aggregate diverse log types (DNS, proxy, Orca, Uptycs, NSG flow logs, and more).
+- Write Python services to fetch and normalize logs via AWS/Azure/GCP APIs (S3, Storage Accounts, Google Cloud Storage, etc.).
+- Parse, cleanse, and aggregate diverse log types (DNS, proxy, Orca, Uptycs, NSG flow logs, VPC flow logs, and more).
 - Identify data quality issues, annotate metadata, and document remediation steps.
 
 ### Interactive Visualization
@@ -17,7 +17,7 @@ We are looking for a versatile Python developer to design, build, and operate an
 - Annotate key events and embed insights for non-technical stakeholders.
 
 ### Infrastructure as Code
-- Develop Terraform modules to provision logging infrastructure in AWS (S3, Kinesis), Azure (Storage Accounts, Log Analytics), and GCP (Cloud Storage, Pub/Sub).
+- Develop Terraform modules to provision logging infrastructure in AWS (S3, SQS), Azure (Storage Accounts, Log Analytics), and GCP (Cloud Storage, Pub/Sub).
 - Configure remote state backends with locking and integrate secrets with secure stores (Key Vault, Secrets Manager, etc.).
 
 ### Configuration Automation *(Nice to have)*
