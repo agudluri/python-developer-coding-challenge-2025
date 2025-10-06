@@ -20,10 +20,6 @@ We are looking for a versatile Python developer to design, build, and operate an
 - Develop Terraform modules to provision logging infrastructure in AWS (S3, SQS), Azure (Storage Accounts, Log Analytics), and GCP (Cloud Storage, Pub/Sub).
 - Configure remote state backends with locking and integrate secrets with secure stores (Key Vault, Secrets Manager, etc.).
 
-### Configuration Automation *(Nice to have)*
-- Create Ansible roles/playbooks to provision container or VM environments, install dependencies, deploy code, and run analyses.
-- Securely manage service principal or IAM credentials via Ansible Vault or environment variables.
-
 ### Security Best Practices
 - Apply least-privilege principles when assigning IAM/RBAC roles.
 - Understand threat models for log data streams (log injection, tampering, retention) and recommend hardening measures.
@@ -33,7 +29,7 @@ We are looking for a versatile Python developer to design, build, and operate an
 - 3+ years of professional Python development experience.
 - Demonstrated ability to work with AWS, Azure, and GCP SDKs/APIs for storage, messaging, and compute services.
 - Strong Plotly (or comparable interactive visualization) skills.
-- Proven Terraform expertise across at least two cloud providers, including remote state and secret management.
+- Proven Terraform expertise, including remote state and secret management.
 - Experience parsing and deriving insights from security logs (DNS queries, proxy logs, NSG flows, Orca/Uptycs outputs, etc.).
 - Familiarity with security concepts and best practices (RBAC, least privilege, log integrity, etc.).
 - Comfortable with Git-based workflows and CI/CD pipelines.
