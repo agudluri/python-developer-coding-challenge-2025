@@ -8,16 +8,16 @@ Welcome! This repository gives you everything you need to decide if the role fit
 - Accept the collaborator invitation we send you so you can push directly to this repository.
 - Follow the submission guidance below to commit your work.
 
-## Cloud Flexibility
-Azure examples are provided, but you are welcome to complete the challenge using AWS, GCP, or another cloud. If you choose a different provider, deliver equivalent infrastructure, automation, and documentation so reviewers can reproduce your solution end-to-end.
+## AWS Focus
+This hiring challenge is AWS-specific. Your solution must target AWS services (S3, ECR, ECS/App Runner, etc.) and operate on AWS VPC Flow Logs. Other clouds are out of scope.
 
 ## Repository Structure
 - `docs/job-description.md` — role overview and qualifications.
 - `docs/challenge.md` — challenge specification, deliverables, and submission checklist.
 
 ## Data Expectations
-- This repository does not include sample NSG flow logs. You must supply representative data for your solution.
-- Follow the guidance in [`docs/challenge.md`](docs/challenge.md#data-requirements--synthesis) to generate or request zipped CSV files that match the required schema.
+- This repository does not include sample AWS VPC Flow Logs. You must supply representative data for your solution.
+- Follow the guidance in [`docs/challenge.md`](docs/challenge.md#data-requirements) to generate or request gzipped CSV files that follow the AWS flow-log schema.
 - Check your data into your branch only if it is synthetic and reasonably small; otherwise document the storage location and regeneration steps.
 
 ## How to Submit
