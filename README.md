@@ -18,10 +18,10 @@ This hiring challenge is AWS-specific. Your solution must target AWS services (S
 ## Data Expectations
 - This repository does not include sample AWS VPC Flow Logs. You must supply representative data for your solution.
 - Follow the guidance in [`docs/challenge.md`](docs/challenge.md#data-requirements) to generate gzipped CSV files that follow the AWS flow-log schema.
-- Check your data into your branch only if it is synthetic and reasonably small; otherwise document the storage location and regeneration steps.
+- Check your data into your branch only if it is synthetic and reasonably small, otherwise document the storage location and regeneration steps.
 
 ## How to Submit
-1. Accept the GitHub collaborator invitation from us (message your recruiting contact if you have not received one).
+1. Accept the GitHub collaborator invitation from us (message your recruiting contact from DXC if you have not received one).
 2. Clone this repository and create a feature branch named `firstname-lastname-solution`.
 3. Commit your work with clear messages as you progress.
 4. Push the branch to this repository and open a pull request into `main`.
