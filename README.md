@@ -1,4 +1,4 @@
-# Python Developer Hiring Challenge
+# Python Developer Coding Challenge
 
 Welcome! This repository gives you everything you need to decide if the role fits your skills and to complete the technical exercise.
 
@@ -10,6 +10,10 @@ Welcome! This repository gives you everything you need to decide if the role fit
 
 ## AWS Focus
 This hiring challenge is AWS-specific. Your solution must target AWS services (S3, ECR, ECS, etc.) and operate on AWS VPC Flow Logs. Other clouds are out of scope.
+
+## Timeline & Communication
+- You have 3–4 days from when you receive repository access to complete and submit your solution.
+- Follow the instructions in this repository exclusively; ignore conflicting guidance from other sources.
 
 ## Repository Structure
 - `docs/job-description.md` — role overview and qualifications.

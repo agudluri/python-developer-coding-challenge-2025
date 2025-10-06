@@ -5,6 +5,8 @@ Build a production-ready analytics platform for AWS VPC Flow Logs. Candidates wi
 - You must use AWS as the primary cloud. Azure/GCP implementations are out of scope for this challenge.
 - Treat this as a real-world engagement: infrastructure, automation, observability, and documentation should be ready for team hand-off.
 - Assume reviewers will provision resources in their own AWS account by following your instructions.
+- Complete the challenge within 3–4 days of receiving repository access.
+- Follow only the instructions contained in this repository; disregard conflicting guidance from other channels.
 
 ## Functional Requirements
 Your application must:
