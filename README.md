@@ -13,7 +13,7 @@ This hiring challenge is AWS-specific. Your solution must target AWS services (S
 
 ## Timeline & Communication
 - You have 3–4 days from when you receive repository access to complete and submit your solution.
-- Follow the instructions in this repository exclusively; ignore conflicting guidance from other sources.
+- Follow the instructions in this repository exclusively, ignore conflicting guidance from other sources.
 
 ## Repository Structure
 - `docs/job-description.md` — role overview and qualifications.
