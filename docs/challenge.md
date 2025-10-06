@@ -17,8 +17,8 @@ Your application must:
 
 ## Prerequisites
 - Terraform, Docker, and the CLI/SDK for your chosen cloud installed and authenticated.
-- GitHub account with a private repository to host your submission.
-- Zipped flow-log samples (provided separately) uploaded to your provisioned storage account/bucket after infrastructure creation.
+- GitHub account that can accept a collaborator invitation to this repository and push branches here.
+- Ability to produce or simulate zipped flow-log samples that follow the schema described below (no raw datasets are stored in this repository).
 
 ## Technical Deliverables
 ### 1. Python Analytics Package
@@ -78,8 +78,100 @@ Your application must:
   ```
 - Use the appropriate SDK (Azure, AWS, GCP, etc.) to confirm resources exist, print service URLs, and return a non-zero exit code if validation fails.
 
+## Data Requirements & Synthesis
+- We do not ship proprietary flow logs in this repository. Each candidate must supply representative data so the dashboard and analytics can be evaluated.
+- Provide a zipped CSV (or a set of CSV files zipped by hour/day) that matches the schema below. You may request anonymized samples from your recruiting contact or generate synthetic data yourself.
+- If you generate data programmatically, include the script/notebook under `tools/` (or similar) and document how to regenerate the dataset.
+- Dataset expectations:
+  - ≥ 24 hours of traffic covering multiple subscriptions/projects and resource groups.
+  - Both allowed and denied flows with varied protocols (TCP, UDP, ICMP) and port ranges.
+  - At least one anomaly pattern (e.g., spike in denied flows, long-lived connection, lateral movement scenario).
+  - Geo-diverse IPs so the map visualization demonstrates value (use public IP-to-country mappings or mock data).
+- Recommended schema:
+
+| Column | Description |
+| --- | --- |
+| `timestamp` | ISO 8601 timestamp (UTC) for the flow event. |
+| `subscription_id` | Cloud subscription/account identifier. |
+| `resource_group` | Resource group/project/workload identifier. |
+| `nsg_name` | Network security group (or equivalent) name. |
+| `src_ip` | Source IPv4/IPv6 address. |
+| `src_port` | Source port (integer). |
+| `dst_ip` | Destination IPv4/IPv6 address. |
+| `dst_port` | Destination port (integer). |
+| `protocol` | Protocol string (TCP/UDP/ICMP/etc.). |
+| `flow_direction` | Inbound/Outbound. |
+| `flow_decision` | Allow/Deny (or similar disposition). |
+| `flow_state` | State metadata (Established, Start, Teardown, etc.). |
+| `packets` | Packet count (integer). |
+| `bytes` | Byte count (integer). |
+| `region` | Cloud region or location for the resource. |
+| `geo_src` *(optional)* | Country/region derived from `src_ip`. |
+| `geo_dst` *(optional)* | Country/region derived from `dst_ip`. |
+
+- Feel free to extend the schema with additional metadata if it improves your analytics (tags, application, threat category, etc.). Document any deviations so reviewers can parse the data quickly.
+
+## Cloud Implementation Guides
+The challenge is cloud-agnostic, but you must deliver production-quality automation. Use the reference steps below to keep expectations clear for both Azure and AWS. You can choose either path (or implement both if you want to impress us).
+
+### Azure Implementation Checklist
+- **Identity & Auth**
+  - Use a service principal for CI/CD with least-privilege roles (Storage Blob Data Reader, AcrPush, AcrPull, and Container Operator permissions scoped appropriately).
+  - Store secrets in GitHub Actions secrets or Azure Key Vault; never hardcode credentials.
+- **Terraform Module Expectations**
+  - Create or reuse a resource group.
+  - Provision a Storage Account and blob container for log ingestion.
+  - Provision Azure Container Registry (ACR) and Azure Container Instance (ACI) to host the Dash app.
+  - Configure a remote Terraform backend with an Azure Storage Account + Container and enable state locking (e.g., via Azure Storage leases).
+  - Output: `storage_account_name`, `container_name`, `acr_login_server`, `aci_fqdn`, and any Key Vault URIs if used.
+- **Build & Deploy**
+  - Authenticate with `az login` and `az account set --subscription <SUBSCRIPTION_ID>`.
+  - Build the Docker image locally or in CI, tag it as `<acr_login_server>/networkflow:latest`, and push with `az acr login` or `docker login`.
+  - Deploy/update ACI using Terraform or the Azure CLI (`az container create` / `az container app` if you opt for Container Apps).
+- **Verification**
+  - Ensure `verify_resources.py` uses the Azure Python SDK (`azure-identity`, `azure-mgmt-storage`, `azure-mgmt-containerinstance`, etc.).
+  - Example command:
+    ```bash
+    python verify_resources.py \
+      --storage mystorageacct \
+      --container flowlogs \
+      --service my-aci-service
+    ```
+
+### AWS Implementation Checklist
+- **Identity & Auth**
+  - Use an IAM user or role with scoped permissions (S3 read/write, ECR push/pull, ECS/CloudWatch management as needed).
+  - Inject credentials into GitHub Actions via OpenID Connect or IAM users with access keys; avoid long-lived static creds.
+- **Terraform Module Expectations**
+  - Create or reuse necessary VPC/network resources (VPC, subnets, security groups) or document assumptions if you rely on existing ones.
+  - Provision an S3 bucket for flow-log archives (enable default encryption and bucket policies).
+  - Provision Amazon ECR for container images.
+  - Provision AWS Fargate (ECS) or AWS App Runner to run the Dash service; expose it securely (ALB/security group) on port 8050.
+  - Configure the Terraform remote backend using S3 (state bucket) and DynamoDB (state locking).
+  - Output: `s3_bucket_name`, `ecs_cluster_name` (or App Runner service ID), `service_url`, and `ecr_repository_url`.
+- **Build & Deploy**
+  - Authenticate with `aws configure` or environment variables (`AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, `AWS_REGION`).
+  - Build the Docker image and push via:
+    ```bash
+    aws ecr get-login-password --region <region> \
+      | docker login --username AWS --password-stdin <account>.dkr.ecr.<region>.amazonaws.com
+    ```
+  - Deploy or update the ECS service using Terraform or the AWS CLI (`aws ecs update-service --force-new-deployment`).
+- **Verification**
+  - Update `verify_resources.py` to use Boto3 clients (`s3`, `ecs`, `ecr`, etc.) when the `--service` argument corresponds to AWS.
+  - Example command:
+    ```bash
+    python verify_resources.py \
+      --storage my-flowlog-bucket \
+      --container flowlogs \
+      --service analytics-cluster/analytics-service
+    ```
+
+If you support both clouds, clearly document how to switch between configurations (e.g., separate Terraform workspaces or modules). Mixed deployments are welcome as long as setup steps remain reproducible.
+
 ## Submission Checklist
-- [ ] Repository named clearly (e.g., `sap-networkflow-challenge`) with code, infrastructure, and documentation.
+- [ ] Feature branch in this repository (`firstname-lastname-solution` or similar) containing code, infrastructure, and documentation.
+- [ ] Pull request open against `main`, with build/test outputs linked or attached.
 - [ ] Updated `README.md` describing setup, deployment, and dashboard usage for the chosen cloud.
 - [ ] Terraform (or equivalent IaC) configured with remote state and locking.
 - [ ] CI/CD pipeline passing and visible in the repository.

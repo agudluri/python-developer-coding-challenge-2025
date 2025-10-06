@@ -5,8 +5,8 @@ Welcome! This repository gives you everything you need to decide if the role fit
 ## How to Navigate
 - Review the [job description](docs/job-description.md) to understand the team, responsibilities, and skills we value.
 - Read the [coding challenge brief](docs/challenge.md) for detailed requirements, deliverables, and evaluation criteria.
-- Fork or copy this template into your own private workspace when you are ready to begin the challenge.
-- Share your solution with us following the submission guidance at the end of the challenge brief.
+- Accept the collaborator invitation we send you so you can push directly to this repository.
+- Follow the submission guidance below to commit your work.
 
 ## Cloud Flexibility
 Azure examples are provided, but you are welcome to complete the challenge using AWS, GCP, or another cloud. If you choose a different provider, deliver equivalent infrastructure, automation, and documentation so reviewers can reproduce your solution end-to-end.
@@ -14,5 +14,18 @@ Azure examples are provided, but you are welcome to complete the challenge using
 ## Repository Structure
 - `docs/job-description.md` — role overview and qualifications.
 - `docs/challenge.md` — challenge specification, deliverables, and submission checklist.
+
+## Data Expectations
+- This repository does not include sample NSG flow logs. You must supply representative data for your solution.
+- Follow the guidance in [`docs/challenge.md`](docs/challenge.md#data-requirements--synthesis) to generate or request zipped CSV files that match the required schema.
+- Check your data into your branch only if it is synthetic and reasonably small; otherwise document the storage location and regeneration steps.
+
+## How to Submit
+1. Accept the GitHub collaborator invitation from us (ping your recruiting contact if you have not received one).
+2. Clone this repository and create a feature branch named `firstname-lastname-solution` (or similar).
+3. Commit your work with clear messages as you progress.
+4. Push the branch to this repository and open a pull request into `main`.
+5. Add build/test screenshots or links in the PR description and tag your recruiting contact so we know it is ready.
+6. Leave the branch and PR open until we confirm that the review is complete.
 
 We recommend reviewing both documents before you start coding. If questions come up, reach out to your recruiting contact so we can clarify expectations quickly.
