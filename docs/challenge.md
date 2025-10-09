@@ -60,7 +60,6 @@ Your application must:
 ### 4. Infrastructure as Code (`infra/` directory)
 - Use Terraform to provision:
   - S3 bucket for flow-log archives (enable encryption, versioning optional but preferred).
-  - AWS Lambda or AWS Glue job *(optional but encouraged)* if you need scheduled preprocessing.
   - Amazon ECR repository for container images.
   - AWS Fargate (ECS) service or AWS App Runner to run the dashboard.
   - IAM roles/policies granting least-privilege access (ECS task role for S3 read, CI/CD role, etc.).
