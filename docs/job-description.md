@@ -13,11 +13,11 @@ We are looking for a versatile Python developer to design, build, and operate an
 - Identify data quality issues, annotate metadata, and document remediation steps.
 
 ### Interactive Visualization
-- Build reusable Plotly Dash components (heatmaps, time-series, geospatial maps) that let security teams drill into anomalies.
+- Build reusable Plotly Dash components (bar graphs, heatmaps, time-series, geospatial maps, etc.) that let security teams drill into anomalies.
 - Annotate key events and embed insights for non-technical stakeholders.
 
 ### Infrastructure as Code
-- Develop Terraform modules to provision logging infrastructure in AWS (S3, SQS), Azure (Storage Accounts, Log Analytics), and GCP (Cloud Storage, Pub/Sub).
+- Develop Terraform modules to provision logging infrastructure in AWS (S3, SQS, etc.), Azure (Storage Accounts, Log Analytics, etc.), and GCP (Cloud Storage, Pub/Sub, etc.).
 - Configure remote state backends with locking and integrate secrets with secure stores (Key Vault, Secrets Manager, etc.).
 
 ### Security Best Practices
@@ -29,14 +29,14 @@ We are looking for a versatile Python developer to design, build, and operate an
 - 3+ years of professional Python development experience.
 - Demonstrated ability to work with AWS, Azure, and GCP SDKs/APIs for storage, messaging, and compute services.
 - Strong Plotly (or comparable interactive visualization) skills.
-- Proven Terraform expertise, including remote state and secret management.
+- Proven Terraform expertise.
 - Experience parsing and deriving insights from security logs (DNS queries, proxy logs, NSG flows, Orca/Uptycs outputs, etc.).
 - Familiarity with security concepts and best practices (RBAC, least privilege, log integrity, etc.).
-- Comfortable with Git-based workflows and CI/CD pipelines.
+- Comfortable with Git-based workflows and CI/CD pipelines (Azure Pipelines, etc.).
 
 ## Preferred Qualifications
 - Prior experience building security or SIEM dashboards.
 - Containerization (Docker) and orchestration (Kubernetes/EKS, etc.) skills.
 - Hands-on experience with monitoring and alerting tools (Prometheus, Grafana, etc.).
-- Familiarity with mocking and testing frameworks (pytest, moto, vcrpy).
+- Familiarity with mocking and testing frameworks (pytest, moto, etc.).
 - Bachelor’s degree in Computer Science, Engineering, or a related field (or equivalent experience).
