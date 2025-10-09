@@ -12,14 +12,14 @@ Build a production-ready analytics platform for AWS VPC Flow Logs. Candidates wi
 Your application must:
 - Download and decompress zipped VPC Flow Log files stored in an S3 bucket.
 - Parse each record to extract account, VPC/subnet/ENI identifiers, source/destination IPs and ports, protocol, action, bytes, packets, and timestamps.
-- Aggregate data to highlight top talkers/listeners, common ports/services, denied traffic, and anomalies (spikes, long-lived connections, unusual regions).
+- Aggregate data to highlight top talkers/listeners, common ports/services, denied traffic, anomalies (spikes, long-lived connections, unusual regions) and any other insights you find valuable.
 - Power an interactive Plotly Dash interface with:
   - Top 10 source and destination IP bar charts.
   - Visualization of denied flows (bar or pie).
   - Time-series chart of flows per hour and complementary heatmap.
   - Gauge/bullet chart for total flows vs. denied percentage.
   - Tables summarizing top talkers/listeners.
-  - Geo map of external IP activity (derive from GeoIP database or synthetic mapping).
+  - Geo map of external IP activity.
   - Sankey diagram of IP-to-IP conversations.
   - Text metrics summarizing totals, anomaly windows, and resource usage.
 - Support filtering by account, VPC, subnet, ENI, protocol, action, and time window.
@@ -42,7 +42,6 @@ Your application must:
       --bucket <s3_bucket_name> \
       --prefix <logs_prefix> \
       [--aws-region <region>] \
-      [--assume-role <role_arn>]
     ```
 - Implement ≥ 3 pytest tests covering parser edge cases, retry/backoff behavior, and anomaly detection logic.
 - Provide ≥ 1 test validating that the Dash app factory starts successfully (can use Dash test client or HTTP check against a test server).
