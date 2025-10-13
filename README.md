@@ -24,6 +24,9 @@ This hiring challenge is AWS-specific. Your solution must target AWS services (S
 - Follow the guidance in [`docs/challenge.md`](docs/challenge.md#data-requirements) to generate gzipped CSV files that follow the AWS flow-log schema.
 - Check your data into your branch only if it is synthetic and reasonably small, otherwise document the storage location and regeneration steps.
 
+## Cost Tips
+- The challenge can be completed within the AWS Free Tier. See [`docs/challenge.md`](docs/challenge.md#cost--free-tier-guidance) for specific limits and alternatives (mocking, LocalStack, Terraform plan-only workflows).
+
 ## How to Submit
 1. Accept the GitHub collaborator invitation from us (message your recruiting contact from DXC if you have not received one).
 2. Clone this repository and create a feature branch named `firstname-lastname-solution`.

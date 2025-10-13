@@ -107,6 +107,13 @@ Your application must:
   - If synthetic, commit the generator script (e.g., `tools/generate_flow_logs.py`) and usage instructions.
   - If anonymized from real logs, describe sanitization steps and provide access instructions (e.g., share via S3 pre-signed URL).
 
+## Cost & Free-Tier Guidance
+- You can complete this challenge within the AWS Free Tier:
+  - S3: 5 GB of standard storage plus 2,000 PUT and 20,000 GET requests.
+  - ECR: 500 MB for private repositories.
+  - Fargate: First 50 vCPU-hours and 100 GB-hours per month.
+  - CloudWatch Logs: Always-free 5 GB ingest and 5 GB archive per month.
+
 ## Review & Submission Workflow
 1. Accept the collaborator invite, clone the repo, and create a feature branch (`firstname-lastname-solution`).
 2. Commit work frequently with descriptive messages.
