@@ -67,30 +67,14 @@ Your application must:
 - Configure remote Terraform state in S3 with DynamoDB table for locking.
 - Output values your reviewers need: `s3_bucket_name`, `s3_logs_prefix`, `ecr_repository_url`, `ecs_cluster_name`/`app_runner_service`, `service_url`, `iam_role_arns`.
 
-### 5. CI/CD Automation
-- Add `.github/workflows/ci.yml` triggered on pushes/PRs targeting `main` that:
-  1. Installs dependencies and runs `pytest` with ≥ 80% coverage.
-  2. Runs linting (`flake8` or `pylint`) with zero errors.
-  3. Executes `terraform fmt -check`, `terraform init`, `terraform validate`, `terraform plan`, and `terraform apply --auto-approve` (use `-target` or workspaces if you separate environments).
-  4. Builds the Docker image, tags it with the commit SHA, and pushes to ECR.
-  5. Deploys/updates the ECS/App Runner service to use the new image.
-- Use GitHub Actions OpenID Connect or encrypted secrets for AWS credentials; document required secrets in `README.md`.
-- Cache dependencies where appropriate to keep build times reasonable.
-
-### 6. Verification Tooling
-- Implement `verify_resources.py` with CLI arguments:
-  ```bash
-  python verify_resources.py \
-    --bucket <s3_bucket_name> \
-    --prefix <logs_prefix> \
-    --service <cluster_name/service_name> \
-    --region <aws_region>
-  ```
-- Use Boto3 to confirm:
-  - S3 bucket and prefix exist and are accessible.
-  - ECS/App Runner service is running the expected task + image tag.
-  - Optionally validate CloudWatch log group creation and basic health checks.
-- Exit with non-zero status if validation fails; print friendly summary output for reviewers.
+### 5. Deployment & CI/CD Plan
+- Instead of implementing a full pipeline, document how you would automate build, test, infrastructure updates, and deployment.
+- Your plan should cover:
+  - Trigger strategy (branching, PR gates, environment promotion).
+  - Key stages and commands (lint/test, Docker build, Terraform plan/apply, ECS/App Runner rollout).
+  - Credential management approach (e.g., GitHub Actions OIDC, secrets) and guardrails for Terraform apply.
+  - Rollback and verification steps you would run after deployment.
+- Capture this plan in `README.md` or a dedicated `docs/cicd-plan.md` so reviewers can follow your thought process.
 
 ## Data Requirements
 - No sample data is bundled. You must supply realistic VPC Flow Log records so reviewers can run the dashboard.
@@ -118,15 +102,16 @@ Your application must:
 1. Accept the collaborator invite, clone the repo, and create a feature branch (`firstname-lastname-solution`).
 2. Commit work frequently with descriptive messages.
 3. Push your branch and open a PR against `main`. Tag your recruiting contact and include:
-   - Links or screenshots for passing tests, linting, and Terraform plans/applies.
+   - Links or screenshots for passing tests, linting, and Terraform plan output.
    - Deployment URLs (e.g., ECS service endpoint).
    - Instructions for accessing sample data if not committed.
+   - Pointer to your documented CI/CD plan.
 4. Leave the PR open until we complete review; expect follow-up questions or requested tweaks.
 
 ## Evaluation Criteria
 - **Data Handling:** Reliability and clarity of log ingestion, parsing, and enrichment.
 - **Analytics Quality:** Accuracy and usefulness of insights, anomaly detection, and visualization UX.
-- **Infrastructure & Automation:** Terraform structure, AWS security posture (least privilege, encryption), CI/CD robustness.
+- **Infrastructure & Automation:** Terraform structure, AWS security posture (least privilege, encryption), and the quality of your documented deployment/CI strategy.
 - **Code Quality:** Modularity, documentation, test coverage, and adherence to Python best practices.
 - **Developer Experience:** Clarity of README/setup instructions, reproducibility, and ease of review.
 

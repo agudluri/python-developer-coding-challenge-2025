@@ -32,7 +32,7 @@ This hiring challenge is AWS-specific. Your solution must target AWS services (S
 2. Clone this repository and create a feature branch named `firstname-lastname-solution`.
 3. Commit your work with clear messages as you progress.
 4. Push the branch to this repository and open a pull request into `main`.
-5. Add build/test screenshots or links in the PR description.
+5. Add build/test screenshots or links, Terraform plan output, deployment notes, and a pointer to your documented CI/CD plan in the PR description.
 6. Leave the branch and PR open until we confirm that the review is complete.
 
 We recommend reviewing both documents before you start coding. If questions come up, reach out to your recruiting contact so we can clarify expectations quickly.
