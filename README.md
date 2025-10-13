@@ -25,7 +25,7 @@ This hiring challenge is AWS-specific. Your solution must target AWS services (S
 - Check your data into your branch only if it is synthetic and reasonably small, otherwise document the storage location and regeneration steps.
 
 ## Cost Tips
-- The challenge can be completed within the AWS Free Tier. See [`docs/challenge.md`](docs/challenge.md#cost--free-tier-guidance) for specific limits and alternatives (mocking, LocalStack, Terraform plan-only workflows).
+- The challenge can be completed within the AWS Free Tier. See [`docs/challenge.md`](docs/challenge.md#cost--free-tier-guidance).
 
 ## How to Submit
 1. Accept the GitHub collaborator invitation from us (message your recruiting contact from DXC if you have not received one).
