@@ -1,0 +1,118 @@
+## Objective
+Build a production-ready analytics platform for AWS VPC Flow Logs. Candidates will ingest raw logs from Amazon S3, process them with Python, visualize insights in Plotly Dash, and automate deployment with Docker, Terraform, and GitHub Actions targeting AWS services.
+
+## Scope & Expectations
+- You must use AWS as the primary cloud. Azure/GCP implementations are out of scope for this challenge.
+- Treat this as a real-world engagement: infrastructure, automation, observability, and documentation should be ready for team hand-off.
+- Assume reviewers will provision resources in their own AWS account by following your instructions.
+- Complete the challenge within 3–4 days of receiving repository access.
+- Follow only the instructions contained in this repository; disregard conflicting guidance from other channels.
+
+## Functional Requirements
+Your application must:
+- Download and decompress zipped VPC Flow Log files stored in an S3 bucket.
+- Parse each record to extract account, VPC/subnet/ENI identifiers, source/destination IPs and ports, protocol, action, bytes, packets, and timestamps.
+- Aggregate data to highlight top talkers/listeners, common ports/services, denied traffic, anomalies (spikes, long-lived connections, unusual regions) and any other insights you find valuable.
+- Power an interactive Plotly Dash interface with:
+  - Top 10 source and destination IP bar charts.
+  - Visualization of denied flows (bar or pie).
+  - Time-series chart of flows per hour and complementary heatmap.
+  - Gauge/bullet chart for total flows vs. denied percentage.
+  - Tables summarizing top talkers/listeners.
+  - Geo map of external IP activity.
+  - Sankey diagram of IP-to-IP conversations.
+  - Text metrics summarizing totals, anomaly windows, and resource usage.
+- Support filtering by account, VPC, subnet, ENI, protocol, action, and time window.
+- Expose a CLI entry point (`networkflow dashboard`) that pulls data from S3 and serves the Dash UI on port 8050.
+- Provide containerized deployment (Docker image) with identical behavior locally and in AWS.
+
+## Prerequisites
+- Terraform, Docker, Python 3.10+, and the AWS CLI installed and authenticated (`aws sts get-caller-identity` succeeds).
+- GitHub account that accepts a collaborator invite to this repository so you can push branches and open PRs.
+- Ability to generate representative VPC Flow Logs data (see Data Requirements).
+
+## Technical Deliverables
+### 1. Python Package
+- Create a `networkflow` package with at minimum:
+  - `parsers.py` to read and decompress gzipped/plain text VPC Flow Log files from S3.
+  - `analyzer.py` to compute aggregations, anomalies, and summary statistics.
+  - `dashboard.py` to bootstrap the Dash app and register the CLI entry point:
+    ```bash
+    networkflow dashboard \
+      --bucket <s3_bucket_name> \
+      --prefix <logs_prefix> \
+      [--aws-region <region>] \
+    ```
+- Implement ≥ 3 pytest tests covering parser edge cases, retry/backoff behavior, and anomaly detection logic.
+- Provide ≥ 1 test validating that the Dash app factory starts successfully (can use Dash test client or HTTP check against a test server).
+
+### 2. Plotly Dash Application
+- Serve the UI at `http://localhost:8050` and from the container on port 8050.
+- Include the visualizations listed in Functional Requirements.
+- Ensure filters interact smoothly (no full refresh required) and clearly highlight denied/anomalous flows.
+- Add loading/error states for data retrieval issues (e.g., S3 connectivity).
+
+### 3. Containerization
+- Supply a `Dockerfile` that installs dependencies, copies source/tests, and sets an entry point (e.g., `networkflow dashboard ...`).
+- Document local execution (e.g., `docker run --rm -p 8050:8050 -e S3_BUCKET=... networkflow`).
+- Keep the final image < 200 MB.
+
+### 4. Infrastructure as Code (`infra/` directory)
+- Use Terraform to provision:
+  - S3 bucket for flow-log archives (enable encryption, versioning optional but preferred).
+  - Amazon ECR repository for container images.
+  - AWS Fargate (ECS) service or AWS App Runner to run the dashboard.
+  - IAM roles/policies granting least-privilege access (ECS task role for S3 read, CI/CD role, etc.).
+  - CloudWatch Log Group (or equivalent) capturing application logs.
+- Configure remote Terraform state in S3 with DynamoDB table for locking.
+- Output values your reviewers need: `s3_bucket_name`, `s3_logs_prefix`, `ecr_repository_url`, `ecs_cluster_name`/`app_runner_service`, `service_url`, `iam_role_arns`.
+
+### 5. Deployment & CI/CD Plan
+- Instead of implementing a full pipeline, document how you would automate build, test, infrastructure updates, and deployment.
+- Your plan should cover:
+  - Trigger strategy (branching, PR gates, environment promotion).
+  - Key stages and commands (lint/test, Docker build, Terraform plan/apply, ECS/App Runner rollout).
+  - Credential management approach (e.g., GitHub Actions OIDC, secrets) and guardrails for Terraform apply.
+  - Rollback and verification steps you would run after deployment.
+- Capture this plan in `README.md` or a dedicated `docs/cicd-plan.md` so reviewers can follow your thought process.
+
+## Data Requirements
+- No sample data is bundled. You must supply realistic VPC Flow Log records so reviewers can run the dashboard.
+- Provide gzipped CSV files using the AWS VPC Flow Logs default format (version 2+ preferred):
+  ```
+  version account-id interface-id srcaddr dstaddr srcport dstport protocol packets bytes start end action log-status tcp-flags type pkt-srcaddr pkt-dstaddr pkt-src-aws-service pkt-dst-aws-service flow-direction packet-dstaddr region sublocation-id sublocation-type vpc-id subnet-id instance-id tcp-connection-status
+  ```
+- Expectations for your dataset:
+  - ≥ 24 hours of traffic with at least two VPCs, multiple subnets, and diverse ENIs.
+  - Mixture of `ACCEPT` and `REJECT` actions, including anomaly scenarios (e.g., port scans, exfiltration spikes).
+  - Geo-diverse public IPs (consider using public datasets or synthetic values plus a GeoIP lookup).
+  - Include connections across protocols (TCP, UDP, ICMP) and port ranges.
+- Document how to regenerate the dataset:
+  - If synthetic, commit the generator script (e.g., `tools/generate_flow_logs.py`) and usage instructions.
+  - If anonymized from real logs, describe sanitization steps and provide access instructions (e.g., share via S3 pre-signed URL).
+
+## Cost & Free-Tier Guidance
+- You can complete this challenge within the AWS Free Tier:
+  - S3: 5 GB of standard storage plus 2,000 PUT and 20,000 GET requests.
+  - ECR: 500 MB for private repositories.
+  - Fargate: First 50 vCPU-hours and 100 GB-hours per month.
+  - CloudWatch Logs: Always-free 5 GB ingest and 5 GB archive per month.
+
+## Review & Submission Workflow
+1. Accept the collaborator invite, clone the repo, and create a feature branch (`firstname-lastname-solution`).
+2. Commit work frequently with descriptive messages.
+3. Push your branch and open a PR against `main`. Tag your recruiting contact and include:
+   - Links or screenshots for passing tests, linting, and Terraform plan output.
+   - Deployment URLs (e.g., ECS service endpoint).
+   - Instructions for accessing sample data if not committed.
+   - Pointer to your documented CI/CD plan.
+4. Leave the PR open until we complete review; expect follow-up questions or requested tweaks.
+
+## Evaluation Criteria
+- **Data Handling:** Reliability and clarity of log ingestion, parsing, and enrichment.
+- **Analytics Quality:** Accuracy and usefulness of insights, anomaly detection, and visualization UX.
+- **Infrastructure & Automation:** Terraform structure, AWS security posture (least privilege, encryption), and the quality of your documented deployment/CI strategy.
+- **Code Quality:** Modularity, documentation, test coverage, and adherence to Python best practices.
+- **Developer Experience:** Clarity of README/setup instructions, reproducibility, and ease of review.
+
+Deliver your solution as if it were heading into production—polished, secure, and well-documented. Good luck!
